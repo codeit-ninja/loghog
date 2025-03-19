@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "events" ADD COLUMN     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "timestamp" TIMESTAMP(3);
