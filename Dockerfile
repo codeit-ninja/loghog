@@ -1,4 +1,4 @@
-FROM oven/bun:latest AS builder
+FROM oven/bun:latest as builder
 
 ARG NODE_ENV
 ARG PUBLIC_SOCKET_URL
@@ -9,22 +9,19 @@ ENV PUBLIC_SOCKET_URL=${PUBLIC_SOCKET_URL}
 ENV DATABASE_URL=${DATABASE_URL}
 
 WORKDIR /app
-RUN apt-get update -y && apt-get install -y openssl
 
 COPY package*.json ./
+RUN bun install --frozen-lockfile --production
 
-RUN bun install --verbose
-
-COPY . .
-
+COPY . . 
 RUN bun run build
 RUN bun prisma generate
 
-FROM node:22-slim
+# Gebruik dezelfde base image om overhead te vermijden
+FROM oven/bun:latest as runtime
 
-COPY --from=builder /app/ ./
-RUN apt-get update -y && apt-get install -y openssl
+WORKDIR /app
+COPY --from=builder /app ./
 
 EXPOSE 3000
-
-CMD ["node", "./build/index.js"]
+CMD ["bun", "run", "build/index.js"]
