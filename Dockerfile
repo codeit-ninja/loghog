@@ -4,6 +4,7 @@ ENV PUBLIC_SOCKET_URL=http://localhost:3000/ws
 ENV DATABASE_URL=postgresql://username:password@localhost:5432/loghog?schema=public
 
 WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl
 
 COPY package*.json ./
 
