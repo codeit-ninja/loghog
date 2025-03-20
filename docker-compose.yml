@@ -15,8 +15,6 @@ services:
       - .env
     depends_on:
       - postgres
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
     networks:
       - dokploy-network
 volumes:
