@@ -3,26 +3,13 @@ version: '3'
 services:
   postgres:
     image: postgres:16
+    container_name: postgres
+    ports:
+      - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-    networks:
-      - dokploy-network
-  app:
-    build: .
-    depends_on:
-      - postgres
-    environment:
-      - PUBLIC_SOCKET_URL
-      - DATABASE_URL
-    networks:
-      - dokploy-network
+    env_file:
+      - .env
+
 volumes:
   postgres-data:
-
-networks:
-  dokploy-network:
-    external: true

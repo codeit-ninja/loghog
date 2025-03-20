@@ -1,7 +1,12 @@
 FROM oven/bun:latest AS builder
 
-ENV PUBLIC_SOCKET_URL=http://localhost:3000/ws
-ENV DATABASE_URL=postgresql://username:password@localhost:5432/loghog?schema=public
+ARG NODE_ENV
+ARG PUBLIC_SOCKET_URL
+ARG DATABASE_URL
+
+ENV NODE_ENV=${NODE_ENV}
+ENV PUBLIC_SOCKET_URL=${PUBLIC_SOCKET_URL}
+ENV DATABASE_URL=${DATABASE_URL}
 
 WORKDIR /app
 RUN apt-get update -y && apt-get install -y openssl

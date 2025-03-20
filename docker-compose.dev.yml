@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:16
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - loghog-network
+  app:
+    build:
+      context: .
+      args:
+        - NODE_ENV=production
+        - PUBLIC_SOCKET_URL=${PUBLIC_SOCKET_URL}
+        - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - postgres
+    networks:
+      - loghog-network
+
+volumes:
+  postgres-data:
+
+networks:
+  loghog-network:
+    driver: bridge
