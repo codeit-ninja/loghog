@@ -1,4 +1,4 @@
-FROM oven/bun:latest as builder
+FROM oven/bun:latest AS builder
 
 ARG NODE_ENV
 ARG PUBLIC_SOCKET_URL
@@ -11,14 +11,14 @@ ENV DATABASE_URL=${DATABASE_URL}
 WORKDIR /app
 
 COPY package*.json ./
-RUN bun install --frozen-lockfile --production
+RUN bun install --frozen-lockfile
 
 COPY . . 
 RUN bun run build
 RUN bun prisma generate
 
 # Gebruik dezelfde base image om overhead te vermijden
-FROM oven/bun:latest as runtime
+FROM oven/bun:latest AS runtime
 
 WORKDIR /app
 COPY --from=builder /app ./
