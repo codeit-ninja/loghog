@@ -1,4 +1,4 @@
-import { dev } from '$app/environment'
+import { env } from '$env/dynamic/public'
 
 export class Socket {
 	socket: WebSocket
@@ -8,7 +8,7 @@ export class Socket {
 	disconnected = true
 
 	constructor(path: string) {
-		this.socket = new WebSocket(`${process.env.PUBLIC_SOCKET_URL}${path}`)
+		this.socket = new WebSocket(`${env.PUBLIC_SOCKET_URL}${path}`)
 		this.socket.addEventListener('open', this.connect.bind(this))
 		this.socket.addEventListener('close', this.disconnect.bind(this))
 	}
