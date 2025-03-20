@@ -11,7 +11,7 @@ RUN bun install --verbose
 
 COPY . .
 
-RUN bun run build --verbose-error-trace
+RUN bun run build
 RUN bun prisma generate
 
 FROM node:22-slim
