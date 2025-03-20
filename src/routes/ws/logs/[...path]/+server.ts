@@ -1,10 +1,9 @@
-import { type Socket } from '@sveltejs/kit'
-import { publish } from '$app/server'
+import { json, type Socket } from '@sveltejs/kit'
 
 export const socket: Socket = {
 	upgrade(req) {
-		console.log(req.params.slug)
-		req.context.log = req.params.slug
+		console.log(req.params.path)
+		req.context.log = req.params.path
 	},
 
 	open(peer) {

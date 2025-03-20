@@ -3,13 +3,10 @@
 	import { NavLink } from '$lib/components/ui/nav'
 	import { Dialog } from '$lib/components/ui/dialog'
 	import { dialog } from '$lib/state/app.svelte'
-	import LogsIcon from '@lucide/svelte/icons/logs'
 
 	import '../app.css'
 
 	let { children, data } = $props()
-
-	console.log(data.groups)
 </script>
 
 <div class="flex max-h-screen min-h-screen flex-col">

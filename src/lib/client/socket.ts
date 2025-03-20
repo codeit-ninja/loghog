@@ -8,6 +8,8 @@ export class Socket {
 	disconnected = true
 
 	constructor(path: string) {
+		console.log(`🔗 Connecting to ${env.PUBLIC_SOCKET_URL}${path}`)
+
 		this.socket = new WebSocket(`${env.PUBLIC_SOCKET_URL}${path}`)
 		this.socket.addEventListener('open', this.connect.bind(this))
 		this.socket.addEventListener('close', this.disconnect.bind(this))

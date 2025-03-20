@@ -21,7 +21,7 @@
 	let searchParams = $state(new URLSearchParams())
 
 	onMount(async () => {
-		const socket = new Socket(`/logs/${page.params.slug}`)
+		const socket = new Socket(`/logs/${page.params.path}`)
 
 		for await (const msg of socket.message()) {
 			const event = JSON.parse(msg)

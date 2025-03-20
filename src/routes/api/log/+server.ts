@@ -8,8 +8,6 @@ export const POST = async ({ request, url, locals }) => {
 	const level = body.level as string
 	const timestamp = body.timestamp as string
 
-	console.log(url.searchParams)
-
 	delete body.message
 	delete body.level
 	delete body.timestamp
