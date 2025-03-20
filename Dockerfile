@@ -17,6 +17,7 @@ RUN bun prisma generate
 FROM node:22-slim
 
 COPY --from=builder /app/ ./
+RUN apt-get update -y && apt-get install -y openssl
 
 EXPOSE 3000
 

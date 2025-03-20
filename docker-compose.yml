@@ -7,10 +7,21 @@ services:
       - postgres-data:/var/lib/postgresql/data
     env_file:
       - .env
+    networks:
+      - dokploy-network
   app:
     build: .
     env_file:
       - .env
-
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+    networks:
+      - dokploy-network
 volumes:
   postgres-data:
+
+networks:
+  dokploy-network:
+    external: true
