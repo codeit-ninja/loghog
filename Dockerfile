@@ -11,7 +11,7 @@ ENV DATABASE_URL=${DATABASE_URL}
 WORKDIR /app
 
 COPY package*.json ./
-RUN bun install --frozen-lockfile
+RUN bun install
 
 COPY . . 
 RUN bun run build
