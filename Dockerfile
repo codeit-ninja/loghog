@@ -21,7 +21,8 @@ RUN bun prisma generate
 FROM oven/bun:latest AS runtime
 
 WORKDIR /app
-COPY --from=builder /app ./
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 3000
 CMD ["bun", "run", "build/index.js"]

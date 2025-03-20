@@ -17,12 +17,7 @@ services:
     networks:
       - dokploy-network
   app:
-    build:
-      context: .
-      args:
-        - NODE_ENV=production
-        - PUBLIC_SOCKET_URL=${PUBLIC_SOCKET_URL}
-        - DATABASE_URL=${DATABASE_URL}
+    image: codeitninja/loghog:latest
     depends_on:
       - postgres
     environment:
