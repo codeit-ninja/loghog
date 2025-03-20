@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm install && npm run check
 
       - name: Build the project
         run: npm run build

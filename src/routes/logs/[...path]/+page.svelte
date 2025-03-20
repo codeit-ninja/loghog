@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Prisma } from '@prisma/client'
 	import FunnelIcon from 'phosphor-svelte/lib/Funnel'
-	import { PUBLIC_SOCKET_URL } from '$env/dynamic/public'
 	import { page } from '$app/state'
 	import { LogTable, LogLine } from '$lib/components/ui/log'
 	import { Input } from '$lib/components/ui/input'
