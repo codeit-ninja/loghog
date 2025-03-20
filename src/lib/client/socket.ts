@@ -1,4 +1,4 @@
-import { PUBLIC_SOCKET_URL } from '$env/static/public'
+import { PUBLIC_SOCKET_URL } from '$env/dynamic/public'
 
 export class Socket {
 	socket: WebSocket

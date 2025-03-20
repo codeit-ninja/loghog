@@ -1,6 +1,5 @@
 import slugify from 'slugify'
 import { BaseService } from './base-service'
-import { PUBLIC_SOCKET_URL } from '$env/static/public'
 import { publish } from '$app/server'
 import { prisma } from '$lib/server/app'
 
