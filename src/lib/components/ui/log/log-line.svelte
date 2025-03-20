@@ -46,7 +46,7 @@
 	onclick={() => {
 		dialog.open({
 			title,
-			props: event,
+			props: { ...event },
 			content
 		})
 	}}

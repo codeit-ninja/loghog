@@ -1,21 +1,25 @@
 import { type Socket } from '@sveltejs/kit'
+import { publish } from '$app/server'
 
 export const socket: Socket = {
-	upgrade(req) {},
+	upgrade(req) {
+		console.log(req.params.slug)
+		req.context.log = req.params.slug
+	},
 
 	open(peer) {
-		console.log(peer.id)
+		peer.subscribe(peer.context.log as string)
 	},
 
-	message(peer, message) {
-		peer.peers.forEach((peer) => peer.send(message.data!.toString()))
-	},
+	// message(peer, message) {
+	// 	peer.peers.forEach((peer) => peer.send(message.data!.toString()))
+	// },
 
 	close(peer, event) {
-		//... handle socket close
-	},
-
-	error(peer, error) {
-		//... handle socket error
+		peer.terminate()
 	}
+
+	// error(peer, error) {
+	// 	//... handle socket error
+	// }
 }

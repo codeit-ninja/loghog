@@ -10,6 +10,8 @@
 	import { isAfter, subMilliseconds } from 'date-fns'
 	import { debounce } from 'lodash-es'
 	import { afterNavigate, beforeNavigate } from '$app/navigation'
+	import { onMount } from 'svelte'
+	import { Socket } from '$lib/client/socket.js'
 
 	let { data } = $props()
 	let events: Prisma.eventsGetPayload<{ include: { logs: true } }>[] = $state([])
@@ -17,42 +19,51 @@
 	let logRange: string = $state('0')
 	let searchQuery = $state<string>()
 	let isLoading = $state(false)
+	let searchParams = $state(new URLSearchParams())
 
-	$effect(() => {
-		const socket = new WebSocket(`${PUBLIC_SOCKET_URL}/logs/${page.params.slug}`)
+	onMount(async () => {
+		const socket = new Socket(`/logs/${page.params.slug}`)
 
-		socket.addEventListener('message', (event) => {
-			const newLogEvent = JSON.parse(event.data)
-			newLogEvent.isNew = true
+		for await (const msg of socket.message()) {
+			const event = JSON.parse(msg)
+			const isInRange = (timestamp: string) =>
+				isAfter(
+					new Date(timestamp),
+					subMilliseconds(new Date(), parseInt(logRange) > 0 ? parseInt(logRange) : 1000000)
+				)
 
 			if (
 				logLevels.includes('all') &&
-				isAfter(
-					new Date(newLogEvent.timestamp),
-					subMilliseconds(new Date(), parseInt(logRange) > 0 ? parseInt(logRange) : 1000000)
-				)
+				isInRange(event.timestamp) &&
+				(searchQuery === undefined ||
+					event.message.toLowerCase().includes(searchQuery.toLowerCase()))
 			) {
-				return events.unshift(newLogEvent)
+				events.unshift(event)
+				continue
 			}
 
 			if (
-				logLevels.includes(newLogEvent.level) &&
-				isAfter(
-					new Date(newLogEvent.timestamp),
-					subMilliseconds(new Date(), parseInt(logRange) > 0 ? parseInt(logRange) : 1000000)
-				)
+				logLevels.includes(event.level) &&
+				isInRange(event.timestamp) &&
+				searchQuery !== undefined
 			) {
-				return events.unshift(newLogEvent)
+				if (searchQuery) {
+					const query = searchQuery.toLowerCase()
+					if (event.message.toLowerCase().includes(query)) {
+						events.unshift(event)
+						continue
+					}
+				} else {
+					events.unshift(event)
+					continue
+				}
 			}
-		})
-
-		return () => socket.close()
+		}
 	})
 
 	const update = debounce(() => {
 		isLoading = true
 
-		const searchParams = new URLSearchParams()
 		searchParams.set('level', logLevels.join(','))
 		searchParams.set('range', logRange)
 
@@ -60,7 +71,7 @@
 			searchParams.set('query', searchQuery)
 		}
 
-		fetch(`/api/logs/${page.params.slug}?${searchParams.toString()}`)
+		fetch(`/api/logs/${page.params.path}?${searchParams.toString()}`)
 			.then((response) => response.json())
 			.then((response) => {
 				if (response.code === 'OK') {
@@ -103,7 +114,7 @@
 
 	<div class="flex h-[0px] flex-grow flex-col">
 		<LogTable {isLoading}>
-			{#each events as event}
+			{#each events as event, index (event.timestamp)}
 				<LogLine {event} />
 			{/each}
 		</LogTable>

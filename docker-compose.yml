@@ -10,6 +10,14 @@ services:
       - postgres-data:/var/lib/postgresql/data
     env_file:
       - .env
+  app:
+    build: .
+    container_name: app
+    ports:
+      - '3000:3000'
+    environment:
+      - PUBLIC_SOCKET_URL=http://localhost:5173/ws
+      - DATABASE_URL=postgresql://codeit:password@postgres:5432/loghog?schema=public
 
 volumes:
   postgres-data:

@@ -10,15 +10,7 @@ type QueryParams = {
 	query?: string
 }
 
-export const GET = async ({
-	params,
-	locals,
-	url
-}: {
-	params: { slug: string }
-	locals: any
-	url: URL
-}) => {
+export const GET = async ({ params, locals, url }) => {
 	const searchParams = url.searchParams.toString()
 	const {
 		orderBy: orderByRaw,
@@ -61,7 +53,7 @@ export const GET = async ({
 	}
 
 	try {
-		const log = await locals.services.logs().get(params.slug, {
+		const log = await locals.services.logs().get(params.path, {
 			include: { events: { orderBy, where, take: 100 } }
 		})
 

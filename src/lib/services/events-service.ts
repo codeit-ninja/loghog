@@ -1,27 +1,36 @@
 import slugify from 'slugify'
 import { BaseService } from './base-service'
-import WebSocket from 'ws'
 import { PUBLIC_SOCKET_URL } from '$env/static/public'
+import { publish } from '$app/server'
+import { prisma } from '$lib/server/app'
 
 export class EventsService extends BaseService {
-	async insert(log: string, level: string, message: string, timestamp: string, meta: string) {
-		const slug = slugify(log, { lower: true, trim: true })
-		const websocket = new WebSocket(`${PUBLIC_SOCKET_URL}/logs/${slug}`)
-
-		websocket.on('open', () => {
-			websocket.send(
-				JSON.stringify({
-					level,
-					message,
-					meta,
-					timestamp
-				})
-			)
-
-			websocket.close()
+	/**
+	 * Inserts a new event into the database, creating the log if it doesn't exist.
+	 *
+	 * @param log - The name of the log to which the event belongs.
+	 * @param level - The severity level of the event (e.g., error, warn, info, debug).
+	 * @param message - The message describing the event.
+	 * @param timestamp - The timestamp when the event occurred.
+	 * @param meta - Additional metadata related to the event, in JSON format.
+	 *
+	 * @returns A promise that resolves to the created event record.
+	 */
+	async insert(
+		log: string,
+		group: string | undefined,
+		level: string,
+		message: string,
+		timestamp: string,
+		meta: string
+	) {
+		const path = slugify(group ? `${group}/${log}` : log, {
+			lower: true,
+			trim: true,
+			remove: /[*+~()'"!:#@]/g
 		})
 
-		return this.locals.prisma.events.create({
+		const event = await prisma.events.create({
 			data: {
 				level,
 				message,
@@ -31,14 +40,22 @@ export class EventsService extends BaseService {
 					connectOrCreate: {
 						create: {
 							name: log,
-							slug
+							group,
+							path
 						},
 						where: {
-							slug
+							path
 						}
 					}
 				}
+			},
+			include: {
+				logs: true
 			}
 		})
+
+		publish(event.logs.path, JSON.stringify({ log, level, message, timestamp, meta }))
+
+		return event
 	}
 }

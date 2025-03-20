@@ -1,6 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { BaseService } from './base-service'
 import type { DefaultArgs } from '@prisma/client/runtime/client'
+import { prisma } from '$lib/server/app'
 
 export type GetLogsFilters = {
 	orderBy?: Prisma.eventsOrderByWithRelationInput
@@ -14,18 +15,37 @@ export class LogsService extends BaseService {
 	 * @param filters An object containing filters to apply to the events.
 	 * @returns The log and its 100 most recent events.
 	 */
-	get(slug: string, filters?: Omit<Prisma.logsFindUniqueOrThrowArgs<DefaultArgs>, 'where'>) {
-		return this.locals.prisma.logs.findUniqueOrThrow({
-			where: { slug },
+	get(path: string, filters?: Omit<Prisma.logsFindUniqueOrThrowArgs<DefaultArgs>, 'where'>) {
+		return prisma.logs.findUniqueOrThrow({
+			where: { path },
 			...filters
 		})
 	}
 
 	list(args?: Prisma.logsFindManyArgs<DefaultArgs>) {
-		return this.locals.prisma.logs.findMany(args)
+		return prisma.logs.findMany(args)
 	}
 
-	clear(slug: string) {
-		return this.locals.prisma.events.deleteMany({ where: { logs: { slug } } })
+	async groups() {
+		const groups = await prisma.logs.groupBy({
+			by: ['group']
+		})
+
+		return await Promise.all(
+			groups.map(async ({ group }) => {
+				const logs = await this.list({
+					where: { group }
+				})
+
+				return {
+					name: group!,
+					logs
+				}
+			})
+		)
+	}
+
+	clear(path: string) {
+		return prisma.events.deleteMany({ where: { logs: { path } } })
 	}
 }

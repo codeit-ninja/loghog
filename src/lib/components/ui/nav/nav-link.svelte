@@ -18,9 +18,9 @@
 <a
 	{...restProps}
 	class={cn(
-		'flex items-center gap-3 rounded-lg px-4 py-2 transition-all',
-		'hover:bg-neutral-900',
-		isActive && 'text-primary bg-neutral-900',
+		'flex items-center gap-3 rounded-lg transition-all',
+		'hover:text-primary-300',
+		isActive && 'text-primary font-bold',
 		restProps.class
 	)}
 >

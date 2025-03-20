@@ -8,7 +8,7 @@ export const logger = createLogger({
 		new transports.Http({
 			host: 'localhost',
 			port: 5173,
-			path: `/api/log?name=${encodeURIComponent('Server #1')}`,
+			path: `/api/log?name=${encodeURIComponent('debug.log')}&group=${encodeURIComponent('Server #2')}`,
 			ssl: false
 		})
 		// new winston.transports.File({ filename: 'error.log', level: 'error' }),
