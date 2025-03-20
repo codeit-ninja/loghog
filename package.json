@@ -48,6 +48,7 @@
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
 		"lodash-es": "^4.17.21",
+		"neverthrow": "^8.2.0",
 		"pocketbase": "^0.25.2",
 		"prisma": "^6.5.0",
 		"qs": "^6.14.0",
