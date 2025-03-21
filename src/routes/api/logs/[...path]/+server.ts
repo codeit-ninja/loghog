@@ -52,14 +52,14 @@ export const GET = async ({ params, locals, url }) => {
 			: [{ message: queryCondition }, { level: queryCondition }]
 	}
 
-	try {
-		const log = await locals.services.logs().get(params.path, {
-			include: { events: { orderBy, where, take: 100 } }
-		})
+	const log = await locals.services.logs().get(params.path, {
+		include: { events: { orderBy, where, take: 100 } }
+	})
 
-		return json(log)
-	} catch (err) {
-		console.error('Error fetching logs:', err)
+	if (log.isErr()) {
+		console.error('Error fetching logs:', log.error)
 		return error(404, 'NOT_FOUND')
 	}
+
+	return json(log.value)
 }

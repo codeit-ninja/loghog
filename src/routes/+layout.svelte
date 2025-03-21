@@ -2,17 +2,23 @@
 	import { CollapsibleMenu } from '$lib/components/ui/collapsible'
 	import { NavLink } from '$lib/components/ui/nav'
 	import { Dialog } from '$lib/components/ui/dialog'
-	import { dialog } from '$lib/state/app.svelte'
+	import { app, dialog } from '$lib/state/app.svelte'
+	import { Breadcrumbs } from '$lib/components/ui/breadcrumbs'
 
 	import '../app.css'
 
 	let { children, data } = $props()
+
+	app.breadcrumbs = data.breadcrumbs
 </script>
 
 <div class="flex max-h-screen min-h-screen flex-col">
 	<header class="flex items-center border-b border-b-neutral-800">
 		<div class="max-w-80 min-w-80 p-4">
 			<a href="/" class="text-2xl font-bold">LogHog</a>
+		</div>
+		<div>
+			<Breadcrumbs />
 		</div>
 	</header>
 	<div class="flex flex-grow overflow-hidden">

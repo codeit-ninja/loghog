@@ -8,6 +8,10 @@ export type DialogState<T extends any[] = any> = {
 	props?: T
 }
 
+export type AppState = {
+	breadcrumbs: App.Locals['breadcrumbs']
+}
+
 /**
  * Initializes a dialog state and provides methods to control its visibility and content.
  *
@@ -83,3 +87,6 @@ export function createDialog() {
 }
 
 export const dialog = createDialog()
+export const app = $state<AppState>({
+	breadcrumbs: []
+})

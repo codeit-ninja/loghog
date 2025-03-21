@@ -7,6 +7,7 @@ declare global {
 			services: import('./lib/services').Services
 			prisma: import('@prisma/client').PrismaClient
 			socket: import('ws').WebSocket
+			breadcrumbs: { title: string; path: string }[]
 		}
 		// interface PageData {}
 		// interface PageState {}

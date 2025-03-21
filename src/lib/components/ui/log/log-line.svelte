@@ -39,8 +39,8 @@
 		'opacity-100 transition-all',
 		event.level === 'error' && 'bg-red-500/10 hover:bg-red-500/25',
 		event.level === 'warn' && 'bg-yellow-500/10 hover:bg-yellow-500/25',
-		event.level === 'info' && 'bg-indigo-500/10 hover:bg-indigo-500/25',
-		event.level === 'debug' && 'bg-cyan-500/10 hover:bg-cyan-500/25'
+		event.level === 'info' && 'hover:bg-blue-500/8',
+		event.level === 'debug' && 'bg-indigo-500/10 hover:bg-indigo-500/25'
 	)}
 	href={`javascript:void(0);`}
 	onclick={() => {
@@ -57,8 +57,8 @@
 				'text-center font-bold',
 				event.level === 'error' && 'border-red-500 text-red-500',
 				event.level === 'warn' && 'border-yellow-500 text-yellow-500',
-				event.level === 'info' && 'border-indigo-500 text-indigo-500',
-				event.level === 'debug' && 'border-cyan-500 text-cyan-500'
+				event.level === 'info' && 'border-blue-600 text-blue-600',
+				event.level === 'debug' && 'border-indigo-500 text-indigo-500'
 			)}
 		>
 			{event.level}

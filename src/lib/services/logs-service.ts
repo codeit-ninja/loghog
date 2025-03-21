@@ -1,7 +1,8 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma, logs } from '@prisma/client'
 import { BaseService } from './base-service'
 import type { DefaultArgs } from '@prisma/client/runtime/client'
 import { prisma } from '$lib/server/app'
+import { err, errAsync, ok, ResultAsync } from 'neverthrow'
 
 export type GetLogsFilters = {
 	orderBy?: Prisma.eventsOrderByWithRelationInput
@@ -15,11 +16,20 @@ export class LogsService extends BaseService {
 	 * @param filters An object containing filters to apply to the events.
 	 * @returns The log and its 100 most recent events.
 	 */
-	get(path: string, filters?: Omit<Prisma.logsFindUniqueOrThrowArgs<DefaultArgs>, 'where'>) {
-		return prisma.logs.findUniqueOrThrow({
-			where: { path },
-			...filters
-		})
+	async get(path: string, filters?: Omit<Prisma.logsFindUniqueOrThrowArgs<DefaultArgs>, 'where'>) {
+		const logResult = await ResultAsync.fromPromise<logs, Prisma.PrismaClientKnownRequestError>(
+			prisma.logs.findUniqueOrThrow({ where: { path }, ...filters }),
+			(e) => e as Prisma.PrismaClientKnownRequestError
+		)
+
+		if (logResult.isErr()) {
+			return err({
+				type: 'LOG_NOT_FOUND',
+				error: logResult.error
+			})
+		}
+
+		return ok(logResult.value)
 	}
 
 	list(args?: Prisma.logsFindManyArgs<DefaultArgs>) {

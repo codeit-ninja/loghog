@@ -7,6 +7,12 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - loghog-network
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=codeit
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=test
   app:
     build:
       context: .
@@ -14,10 +20,15 @@ services:
         - NODE_ENV=production
         - PUBLIC_SOCKET_URL=${PUBLIC_SOCKET_URL}
         - DATABASE_URL=${DATABASE_URL}
+    environment:
+      - PUBLIC_SOCKET_URL=http://localhost:3000
+      - DATABASE_URL=postgresql://codeit:password@postgres/test?schema=public
     depends_on:
       - postgres
     networks:
       - loghog-network
+    ports:
+      - 3000:3000
 
 volumes:
   postgres-data:

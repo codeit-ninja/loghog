@@ -1,15 +1,16 @@
 import { logger } from '$lib/logger'
 
-export const load = async ({ locals, request, cookies, getClientAddress }) => {
+export const load = async ({ locals, url, route }) => {
 	const groups = await locals.services.logs().groups()
-	const logs = await locals.services.logs().list()
+	const logs = await locals.services.logs().list({ where: { group: null } })
 
-	// setTimeout(() => {
-	// 	logger.log('warn', 'Loaded layout', { groups, logs })
-	// }, 2000)
+	setTimeout(() => {
+		logger.log('info', 'Loaded layout', { groups, logs })
+	}, 2000)
 
 	return {
 		groups,
-		logs
+		logs,
+		breadcrumbs: locals.breadcrumbs
 	}
 }
