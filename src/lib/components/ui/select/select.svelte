@@ -16,9 +16,13 @@
 <Select.Root bind:value={value as never} {...restProps}>
 	<Select.Trigger
 		class={cn(
-			'flex h-10 min-w-3xs items-center justify-between rounded-md bg-neutral-900 px-3 text-left text-sm transition-colors outline-none',
-			'cursor-pointer border-2 border-neutral-900 font-bold',
-			'hover:border-neutral-800 hover:bg-neutral-800'
+			'flex h-10 min-w-3xs items-center justify-between rounded-md ',
+			'px-3 text-left text-sm transition-colors outline-none',
+			'cursor-pointer border-2 font-bold text-neutral-500',
+			'border-neutral-200 bg-neutral-50 hover:border-neutral-300 hover:text-black',
+			'dark:border-neutral-900 dark:bg-neutral-900',
+			'dark:hover:border-neutral-800 dark:hover:bg-neutral-800',
+			'dark:text-neutral-400 dark:hover:text-white'
 		)}
 	>
 		<span>{placeholder}</span>
@@ -37,8 +41,10 @@
 			align="start"
 			sideOffset={4}
 			class={cn(
-				'w-full rounded-md border-2 border-neutral-800 bg-neutral-900 p-1 shadow-md',
-				'w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)]'
+				'w-full rounded-md border-2 p-1 shadow-md',
+				'w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)]',
+				'border-neutral-200 bg-neutral-50',
+				'dark:border-neutral-800 dark:bg-neutral-900'
 			)}
 		>
 			<Select.Viewport class="flex w-full flex-col gap-1">

@@ -20,7 +20,8 @@
 	<Collapsible.Trigger
 		class={cn(
 			'mb-4 flex items-center gap-3 text-neutral-600 transition-colors hover:cursor-pointer',
-			'hover:text-neutral-400 data-[state=open]:text-white data-[state=open]:[&>svg]:rotate-90'
+			'hover:text-neutral-700 data-[state=open]:text-black data-[state=open]:[&>svg]:rotate-90',
+			'dark:hover:text-neutral-400 dark:data-[state=open]:text-white'
 		)}
 	>
 		<ArrowRightIcon weight="fill" />

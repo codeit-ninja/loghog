@@ -29,11 +29,11 @@
 		{...restProps}
 		class={cn(
 			'border-muted',
-			'data-[state=unchecked]:border-border-input data-[state=unchecked]:bg-background',
-			'data-[state=unchecked]:hover:border-dark-40 peer inline-flex size-[20px]',
-			'data-[state=checked]:bg-white data-[state=checked]:text-black',
+			'data-[state=unchecked]:border-neutral-900',
+			'peer inline-flex size-[20px]',
 			'items-center justify-center rounded-md border',
 			'transition-all duration-150 ease-in-out active:scale-[0.98]',
+			'dark:data-[state=checked]:bg-white dark:data-[state=checked]:text-black',
 			restProps.class
 		)}
 	>

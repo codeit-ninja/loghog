@@ -28,12 +28,14 @@
 
 <Dialog.Root bind:open {...restProps}>
 	<Dialog.Portal>
-		<Dialog.Overlay class={cn('fixed inset-0 z-50 bg-black/5 backdrop-blur-xs')} />
+		<Dialog.Overlay class={cn('fixed inset-0 z-50 bg-white/65 backdrop-blur-xs dark:bg-black/5')} />
 		<Dialog.Content
 			{...contentProps}
 			class={cn(
-				'fixed top-1/2 left-1/2 z-50 -translate-1/2 rounded-xl border-2 border-neutral-800 bg-black',
+				'fixed top-1/2 left-1/2 z-50 -translate-1/2 rounded-xl border-2',
 				'max-h-[calc(100%-2rem)] overflow-clip',
+				'border-neutral-200 bg-neutral-50',
+				'dark:border-neutral-800 dark:bg-black',
 				size === 'full' && 'w-[calc(100%-2rem)]',
 				size === 'xl' && 'w-4xl',
 				size === 'lg' && 'w-3xl',

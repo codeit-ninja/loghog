@@ -6,6 +6,7 @@
 	import { Breadcrumbs } from '$lib/components/ui/breadcrumbs'
 
 	import '../app.css'
+	import { Switch } from '$lib/components/ui/input'
 
 	let { children, data } = $props()
 
@@ -13,16 +14,21 @@
 </script>
 
 <div class="flex max-h-screen min-h-screen flex-col">
-	<header class="flex items-center border-b border-b-neutral-800">
+	<header class="flex items-center border-b border-neutral-200 dark:border-neutral-900">
 		<div class="max-w-80 min-w-80 p-4">
 			<a href="/" class="text-2xl font-bold">LogHog</a>
 		</div>
-		<div>
+		<div class="flex flex-grow-1 px-6">
 			<Breadcrumbs />
+			<div class="ms-auto">
+				<Switch bind:checked={app.darkMode}></Switch>
+			</div>
 		</div>
 	</header>
 	<div class="flex flex-grow overflow-hidden">
-		<aside class="max-w-80 min-w-80 flex-grow border-r border-r-neutral-900 p-4">
+		<aside
+			class="max-w-80 min-w-80 flex-grow border-r border-neutral-200 p-4 dark:border-neutral-900"
+		>
 			<h3 class="mt-2 mb-2 text-sm font-bold text-neutral-600 uppercase">Logs</h3>
 			<div class="flex flex-col gap-3">
 				{#each data.groups as group}
@@ -37,14 +43,6 @@
 					</CollapsibleMenu>
 				{/each}
 			</div>
-			<!-- <nav class="flex flex-col gap-1">
-				{#each data.logs as log}
-					<NavLink href={`/logs/${log.path}`}>
-						<LogsIcon class="text-neutral-600" size={20} />
-						<span>{log.name}</span>
-					</NavLink>
-				{/each}
-			</nav> -->
 		</aside>
 		<main class="flex flex-grow">
 			{@render children()}

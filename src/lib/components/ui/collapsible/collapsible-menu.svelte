@@ -19,9 +19,9 @@
 <Collapsible.Root bind:open bind:ref {...restProps}>
 	<Collapsible.Trigger
 		class={cn(
-			'flex items-center gap-3 text-neutral-400 transition-colors hover:cursor-pointer',
-			'hover:text-neutral-400 data-[state=open]:text-white data-[state=open]:[&>svg]:rotate-90',
-			'data-[state=open]:font-bold'
+			'flex items-center gap-3 text-neutral-500 transition-colors dark:text-neutral-400',
+			'hover:cursor-pointer hover:text-black',
+			'data-[state=open]:text-black dark:hover:text-neutral-400 dark:data-[state=open]:text-white data-[state=open]:[&>svg]:rotate-90'
 		)}
 	>
 		<ArrowRightIcon size={22} />

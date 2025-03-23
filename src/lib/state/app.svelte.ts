@@ -1,3 +1,4 @@
+import { browser } from '$app/environment'
 import type { Snippet } from 'svelte'
 
 export type DialogState<T extends any[] = any> = {
@@ -10,6 +11,7 @@ export type DialogState<T extends any[] = any> = {
 
 export type AppState = {
 	breadcrumbs: App.Locals['breadcrumbs']
+	darkMode: boolean
 }
 
 /**
@@ -86,7 +88,52 @@ export function createDialog() {
 	}
 }
 
+/**
+ * Initializes an app state and provides methods to control its breadcrumbs and dark mode.
+ *
+ * @returns {Object} An object containing:
+ *  - `breadcrumbs`: The current breadcrumbs.
+ *  - `darkMode`: The current dark mode.
+ */
+export function createState() {
+	let breadcrumbs = $state.raw<AppState['breadcrumbs']>([])
+	let darkMode = $state.raw<AppState['darkMode']>(false)
+
+	$effect.root(() => {
+		if (localStorage.getItem('darkMode') === null) {
+			darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+		} else {
+			darkMode = JSON.parse(localStorage.getItem('darkMode') || 'false')
+		}
+
+		$effect(() => {
+			if (darkMode) {
+				window.document.documentElement.classList.add('dark')
+			} else {
+				window.document.documentElement.classList.remove('dark')
+			}
+		})
+	})
+
+	return {
+		get breadcrumbs() {
+			return breadcrumbs
+		},
+		set breadcrumbs(value) {
+			breadcrumbs = value
+		},
+		get darkMode() {
+			return darkMode
+		},
+		set darkMode(value) {
+			if (browser) {
+				localStorage.setItem('darkMode', JSON.stringify(value))
+			}
+
+			darkMode = value
+		}
+	}
+}
+
 export const dialog = createDialog()
-export const app = $state<AppState>({
-	breadcrumbs: []
-})
+export const app = createState()

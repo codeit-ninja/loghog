@@ -23,7 +23,7 @@
 {/snippet}
 
 {#snippet content()}
-	<p class="mb-4 border-b border-b-neutral-800 pb-4">
+	<p class="mb-4 border-b border-neutral-200 pb-4 dark:border-b-neutral-800">
 		{event.message}
 	</p>
 	<Collapsible buttonText="Inspect metadata">

@@ -22,18 +22,20 @@
 
 <Select.Root placeholder="Time range" type="single" bind:value={logRange}>
 	{#each ranges as { label, value }}
+		{@const checked = value === logRange}
 		<Select.Item
 			{label}
 			{value}
 			class={cn(
 				'flex items-center gap-3 rounded-md px-2 py-1 transition-colors',
-				'hover:cursor-pointer hover:bg-neutral-800'
+				'hover:cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-800'
 			)}
 		>
 			<span
 				class={cn(
-					'flex size-5 items-center justify-center rounded-md border border-white',
-					value === logRange && 'bg-white text-black'
+					'flex size-5 items-center justify-center rounded-md border',
+					'dark:border-white',
+					checked && 'border-black bg-black text-white dark:bg-white dark:text-black'
 				)}
 			>
 				{#if value === logRange}

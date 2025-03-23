@@ -40,6 +40,7 @@
 	"dependencies": {
 		"@alenaksu/json-viewer": "^2.1.2",
 		"@clickhouse/client": "^1.10.1",
+		"@fontsource-variable/onest": "^5.2.6",
 		"@lucide/svelte": "^0.482.0",
 		"@prisma/client": "^6.5.0",
 		"@speed-highlight/core": "^1.2.7",

@@ -98,7 +98,7 @@
 </script>
 
 <div class="flex flex-grow flex-col gap-4">
-	<header class=" flex flex-col border-b border-b-neutral-800 px-6 py-6">
+	<header class=" flex flex-col border-b border-neutral-200 px-6 py-6 dark:border-neutral-900">
 		<H level={1} class="mb-4">{data.name}</H>
 		<div class="flex items-center gap-2">
 			<span class="me-6 flex items-center gap-2 text-neutral-500">

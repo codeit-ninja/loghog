@@ -14,6 +14,9 @@ importers:
       '@clickhouse/client':
         specifier: ^1.10.1
         version: 1.10.1
+      '@fontsource-variable/onest':
+        specifier: ^5.2.6
+        version: 5.2.6
       '@lucide/svelte':
         specifier: ^0.482.0
         version: 0.482.0(svelte@5.23.0)
@@ -296,6 +299,9 @@ packages:
 
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+
+  '@fontsource-variable/onest@5.2.6':
+    resolution: {integrity: sha512-zTa/6OKxrO6zJbsmNcbW5/2pVXITB975/hhxUQ/auwgosWimMoFnOVxix9QGoOzLWwnY7A4FChlPYpW56rP7/Q==}
 
   '@internationalized/date@3.7.0':
     resolution: {integrity: sha512-VJ5WS3fcVx0bejE/YHfbDKR/yawZgKqn/if+oEeLqNwBtPzVB06olkfcnojTmEMX+gTpH+FlQ69SHNitJ8/erQ==}
@@ -1434,6 +1440,8 @@ snapshots:
       '@floating-ui/utils': 0.2.9
 
   '@floating-ui/utils@0.2.9': {}
+
+  '@fontsource-variable/onest@5.2.6': {}
 
   '@internationalized/date@3.7.0':
     dependencies:

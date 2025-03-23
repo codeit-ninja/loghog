@@ -1,4 +1,7 @@
+@import '@fontsource-variable/onest';
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @plugin '@tailwindcss/typography';
 @plugin 'tailwindcss-animate';
@@ -6,6 +9,8 @@
 @config "../tailwind.config.js";
 
 @theme {
+	--default-font-family: 'Onest Variable';
+
 	--color-primary-50: oklch(0.969 0.015 12.422);
 	--color-primary-100: oklch(0.941 0.03 12.58);
 	--color-primary-200: oklch(0.892 0.058 10.001);
@@ -88,11 +93,10 @@
 @layer components {
 	json-viewer {
 		padding: 0.2rem 1rem;
-		border: 2px solid var(--color-neutral-900);
+		border: 2px solid var(--color-neutral-200);
 		border-radius: 0.5rem;
 
-		/* Background, font and indentation */
-		--background-color: var(--color-black);
+		--background-color: var(--color-neutral-100);
 		--color: var(--color-white);
 		--font-family: Nimbus Mono PS, Courier New, monospace;
 		--font-size: 14px;
@@ -100,27 +104,55 @@
 		--indent-size: 0.8em;
 		--indentguide-size: 1px;
 		--indentguide-style: solid;
-		--indentguide-color: var(--color-neutral-900);
-		--indentguide-color-active: var(--color-neutral-800);
+		--indentguide-color: var(--color-neutral-200);
+		--indentguide-color-active: var(--color-neutral-400);
 		--indentguide: var(--indentguide-size) var(--indentguide-style) var(--indentguide-color);
 		--indentguide-active: var(--indentguide-size) var(--indentguide-style)
 			var(--indentguide-color-active);
-		--outline-color: var(--color-neutral-800);
+		--outline-color: var(--color-neutral-400);
 		--outline-width: 1px;
 		--outline-style: dotted;
 
-		/* Types colors */
-		--string-color: var(--color-emerald-400);
-		--number-color: var(--color-emerald-300);
-		--boolean-color: var(--color-emerald-300);
+		--string-color: var(--color-emerald-600);
+		--number-color: var(--color-emerald-600);
+		--boolean-color: var(--color-emerald-600);
 		--null-color: var(--color-rose-400);
-		--property-color: var(--color-blue-300);
+		--property-color: var(--color-blue-500);
 
-		/* Collapsed node preview */
 		--preview-color: var(--color-blue-300);
 
-		/* Search highlight color */
 		--highlight-color: #c92a2a;
+	}
+
+	:where(.dark, .dark *) {
+		json-viewer {
+			--background-color: var(--color-black);
+			--color: var(--color-white);
+			--font-family: Nimbus Mono PS, Courier New, monospace;
+			--font-size: 14px;
+			--line-height: 1.2rem;
+			--indent-size: 0.8em;
+			--indentguide-size: 1px;
+			--indentguide-style: solid;
+			--indentguide-color: var(--color-neutral-900);
+			--indentguide-color-active: var(--color-neutral-800);
+			--indentguide: var(--indentguide-size) var(--indentguide-style) var(--indentguide-color);
+			--indentguide-active: var(--indentguide-size) var(--indentguide-style)
+				var(--indentguide-color-active);
+			--outline-color: var(--color-neutral-800);
+			--outline-width: 1px;
+			--outline-style: dotted;
+
+			--string-color: var(--color-emerald-400);
+			--number-color: var(--color-emerald-300);
+			--boolean-color: var(--color-emerald-300);
+			--null-color: var(--color-rose-400);
+			--property-color: var(--color-blue-300);
+
+			--preview-color: var(--color-blue-300);
+
+			--highlight-color: #c92a2a;
+		}
 	}
 
 	.key {
