@@ -2,7 +2,8 @@ name: Release new version
 
 on:
   push:
-    branches: ['releases/v*']
+    tags:
+      - 'v*' # Trigger workflow on new tags matching the pattern v*
 
 jobs:
   build-and-push-image:
@@ -23,16 +24,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install dependencies
         run: npm install --loglevel verbose && npm run check
 
       - name: Build the project
         run: npm run build
 
-      - name: Build and push multi-arch Docker image
+      - name: Build and push multi-arch Docker image to Docker Hub and GHCR
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: codeitninja/loghog:v1.1.0
+          tags: |
+            codeitninja/loghog:${{ github.ref_name }} # Docker Hub
+            ghcr.io/${{ github.repository_owner }}/loghog:${{ github.ref_name }} # GitHub Container Registry
           platforms: linux/amd64,linux/arm64

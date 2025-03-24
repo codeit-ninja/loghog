@@ -1,27 +1,24 @@
-FROM oven/bun:latest AS builder
+FROM node:22-slim AS base
 
-ARG NODE_ENV
-ARG PUBLIC_SOCKET_URL
-ARG DATABASE_URL
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 
-ENV NODE_ENV=${NODE_ENV}
-ENV PUBLIC_SOCKET_URL=${PUBLIC_SOCKET_URL}
-ENV DATABASE_URL=${DATABASE_URL}
+RUN corepack enable
 
+COPY . /app
 WORKDIR /app
 
-COPY package*.json ./
-RUN bun install
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN pnpm prisma generate
 
-COPY . . 
-RUN bun run build
-RUN bun prisma generate
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
 
-# Gebruik dezelfde base image om overhead te vermijden
-FROM oven/bun:latest AS runtime
-
-WORKDIR /app
-COPY --from=builder /app ./
+FROM base
+COPY --from=prod-deps /app/node_modules /app/node_modules
+COPY --from=build /app/build /app/build
 
 EXPOSE 3000
-CMD ["bun", "run", "build/index.js"]
+CMD [ "node", "./build/index.js" ]
