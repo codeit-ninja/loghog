@@ -43,8 +43,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ env.IMAGE_NAME }}
-            ${{ env.IMAGE_NAME }}
+            ${{ env.DOCKERHUB_IMAGE }}
+            ${{ env.GHCR_IMAGE }}
 
       - name: Install dependencies
         run: npm install --loglevel verbose && npm run check
