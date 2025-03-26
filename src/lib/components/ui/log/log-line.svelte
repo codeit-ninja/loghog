@@ -13,6 +13,17 @@
 	}
 
 	let { event }: Props = $props()
+
+	// const levels = {
+	// 	   error: 0,
+	// 	   warn: 1,
+	// 	   info: 2,
+	// 	   http: 3,
+	// 	   success: 4,
+	// 	   verbose: 5,
+	// 	   debug: 6,
+	// 	   silly: 7
+	// }
 </script>
 
 {#snippet title()}
@@ -35,12 +46,13 @@
 
 <a
 	class={cn(
-		'grid grid-cols-12 gap-4 rounded-lg px-6 py-3',
+		'grid grid-cols-12 gap-4 rounded-lg px-6 py-1',
 		'opacity-100 transition-all',
-		event.level === 'error' && 'bg-red-500/10 hover:bg-red-500/25',
-		event.level === 'warn' && 'bg-yellow-500/10 hover:bg-yellow-500/25',
-		event.level === 'info' && 'hover:bg-blue-500/8',
-		event.level === 'debug' && 'bg-indigo-500/10 hover:bg-indigo-500/25'
+		event.level === 'success' && 'hover:bg-success/15',
+		event.level === 'error' && 'hover:bg-error/15',
+		event.level === 'warn' && 'hover:bg-warning/15',
+		event.level === 'info' && 'hover:bg-info/15',
+		event.level === 'debug' && 'hover:bg-debug/15'
 	)}
 	href={`javascript:void(0);`}
 	onclick={() => {
@@ -54,21 +66,41 @@
 	<div class="col-span-2 xl:col-span-1">
 		<span
 			class={cn(
-				'text-center font-bold',
-				event.level === 'error' && 'border-red-500 text-red-500',
-				event.level === 'warn' && 'border-yellow-500 text-yellow-500',
-				event.level === 'info' && 'border-blue-600 text-blue-600',
-				event.level === 'debug' && 'border-indigo-500 text-indigo-500'
+				'flex gap-2 text-center'
+				// event.level === 'success' && 'text-success border-success',
+				// event.level === 'error' && 'text-error border-error',
+				// event.level === 'warn' && 'text-warning border-warning',
+				// event.level === 'info' && 'text-info border-info',
+				// event.level === 'debug' && 'text-debug border-debug'
 			)}
 		>
-			{event.level}
+			<span
+				class={cn(
+					'w-2 rounded-full',
+					event.level === 'success' && 'bg-success/50',
+					event.level === 'error' && 'bg-error/50',
+					event.level === 'warn' && 'bg-warning/50',
+					event.level === 'info' && 'bg-info/50',
+					event.level === 'debug' && 'bg-debug/50'
+				)}
+			></span>
+			<span
+				class={cn(
+					'flex-grow rounded-full py-1 text-center text-xs font-semibold uppercase',
+					event.level === 'success' && 'bg-success/20 text-success',
+					event.level === 'error' && 'bg-error/20 text-error',
+					event.level === 'warn' && 'bg-warning/20 text-warning',
+					event.level === 'info' && 'bg-info/20 text-info',
+					event.level === 'debug' && 'bg-debug/20 text-debug'
+				)}>{event.level}</span
+			>
 		</span>
 	</div>
 	<div class="col-span-3 xl:col-span-2">
 		<span class="text-neutral-500">{format(event.timestamp!, 'yyyy-MM-dd HH:mm:ss')}</span>
 	</div>
 	<div class="col-span-3 xl:col-span-4">{event.message}</div>
-	<div class="col-span-4 overflow-hidden text-nowrap text-ellipsis xl:col-span-5">
+	<div class="col-span-4 overflow-hidden text-nowrap text-ellipsis text-neutral-400 xl:col-span-5">
 		<code>{JSON.stringify(event.meta)}</code>
 	</div>
 </a>

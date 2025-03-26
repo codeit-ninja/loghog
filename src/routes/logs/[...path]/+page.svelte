@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Prisma } from '@prisma/client'
 	import FunnelIcon from 'phosphor-svelte/lib/Funnel'
+	import { source } from 'sveltekit-sse'
 	import { page } from '$app/state'
 	import { LogTable, LogLine } from '$lib/components/ui/log'
 	import { Input } from '$lib/components/ui/input'
@@ -8,9 +9,8 @@
 	import { H } from '$lib/components/ui/heading'
 	import { isAfter, subMilliseconds } from 'date-fns'
 	import { debounce } from 'lodash-es'
-	import { afterNavigate, beforeNavigate } from '$app/navigation'
-	import { onMount } from 'svelte'
-	import { Socket } from '$lib/client/socket.js'
+	import { beforeNavigate } from '$app/navigation'
+	import { untrack } from 'svelte'
 
 	let { data } = $props()
 	let events: Prisma.eventsGetPayload<{ include: { logs: true } }>[] = $state([])
@@ -20,11 +20,14 @@
 	let isLoading = $state(false)
 	let searchParams = $state(new URLSearchParams())
 
-	onMount(async () => {
-		const socket = new Socket(`/logs/${page.params.path}`)
+	const event = source(`/sse/logs/${page.params.path}`).select('message').json()
 
-		for await (const msg of socket.message()) {
-			const event = JSON.parse(msg)
+	$effect(() => {
+		if (!$event) {
+			return
+		}
+
+		untrack(() => {
 			const isInRange = (timestamp: string) =>
 				isAfter(
 					new Date(timestamp),
@@ -33,31 +36,26 @@
 
 			if (
 				logLevels.includes('all') &&
-				isInRange(event.timestamp) &&
+				isInRange($event.timestamp) &&
 				(searchQuery === undefined ||
-					event.message.toLowerCase().includes(searchQuery.toLowerCase()))
+					$event.message.toLowerCase().includes(searchQuery.toLowerCase()))
 			) {
-				events.unshift(event)
-				continue
-			}
-
-			if (
-				logLevels.includes(event.level) &&
-				isInRange(event.timestamp) &&
+				events.unshift($event)
+			} else if (
+				logLevels.includes($event.level) &&
+				isInRange($event.timestamp) &&
 				searchQuery !== undefined
 			) {
 				if (searchQuery) {
 					const query = searchQuery.toLowerCase()
-					if (event.message.toLowerCase().includes(query)) {
-						events.unshift(event)
-						continue
+					if ($event.message.toLowerCase().includes(query)) {
+						events.unshift($event)
 					}
 				} else {
-					events.unshift(event)
-					continue
+					events.unshift($event)
 				}
 			}
-		}
+		})
 	})
 
 	const update = debounce(() => {
@@ -66,8 +64,10 @@
 		searchParams.set('level', logLevels.join(','))
 		searchParams.set('range', logRange)
 
-		if (searchQuery) {
+		if (searchQuery && searchQuery !== '') {
 			searchParams.set('query', searchQuery)
+		} else {
+			searchParams.delete('query')
 		}
 
 		fetch(`/api/logs/${page.params.path}?${searchParams.toString()}`)
@@ -113,7 +113,7 @@
 
 	<div class="flex h-[0px] flex-grow flex-col">
 		<LogTable {isLoading}>
-			{#each events as event, index (event.timestamp)}
+			{#each events as event, index (event.id)}
 				<LogLine {event} />
 			{/each}
 		</LogTable>

@@ -108,6 +108,9 @@ importers:
       svelte-check:
         specifier: ^4.1.5
         version: 4.1.5(picomatch@4.0.2)(svelte@5.23.0)(typescript@5.8.2)
+      sveltekit-sse:
+        specifier: ^0.13.16
+        version: 0.13.16(@microsoft/fetch-event-source@2.0.1)(@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@440e71c(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.23.0)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)))(svelte@5.23.0)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)))(svelte@5.23.0)
       tailwindcss:
         specifier: ^4.0.14
         version: 4.0.14
@@ -334,6 +337,9 @@ packages:
     resolution: {integrity: sha512-n2ycHU9cNcleRDwwpEHBJ6pYzVhHIaL3a+9dQa8kns9hB2g05bY+v2p2KP8v0pZwtNhYTHk/F2o2uZ1bVtQGhw==}
     peerDependencies:
       svelte: ^5
+
+  '@microsoft/fetch-event-source@2.0.1':
+    resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
 
   '@polka/url@1.0.0-next.28':
     resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
@@ -1213,6 +1219,14 @@ packages:
     resolution: {integrity: sha512-v0lL3NuKontiCxholEiAXCB+BYbndlKbwlDMK0DS86WgGELMJSpyqCSbJeMEMBDwOglnS7Ar2Rq0wwa/z2L8Vg==}
     engines: {node: '>=18'}
 
+  sveltekit-sse@0.13.16:
+    resolution: {integrity: sha512-+ORJ5SDeNTYJrEJOQz2Wevsr0OgrZwI5VMT3lhr5vbn7NbClcm+CyXmqtPMtd0dk4B1OCzch34TNmRXoejHK9g==}
+    version: 0.13.16
+    peerDependencies:
+      '@microsoft/fetch-event-source': ^2.0.1
+      '@sveltejs/kit': ^2.0.0
+      svelte: ^4.0.0 || ^5.0.0-next.0
+
   tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
 
@@ -1473,6 +1487,8 @@ snapshots:
   '@lucide/svelte@0.482.0(svelte@5.23.0)':
     dependencies:
       svelte: 5.23.0
+
+  '@microsoft/fetch-event-source@2.0.1': {}
 
   '@polka/url@1.0.0-next.28': {}
 
@@ -2275,6 +2291,12 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.17
       zimmerframe: 1.1.2
+
+  sveltekit-sse@0.13.16(@microsoft/fetch-event-source@2.0.1)(@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@440e71c(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.23.0)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)))(svelte@5.23.0)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)))(svelte@5.23.0):
+    dependencies:
+      '@microsoft/fetch-event-source': 2.0.1
+      '@sveltejs/kit': https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@440e71c(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.23.0)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)))(svelte@5.23.0)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2))
+      svelte: 5.23.0
 
   tabbable@6.2.0: {}
 

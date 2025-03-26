@@ -2,6 +2,7 @@ import slugify from 'slugify'
 import { BaseService } from './base-service'
 import { publish } from '$app/server'
 import { prisma } from '$lib/server/app'
+import { clients } from '$lib/server/sse'
 
 export class EventsService extends BaseService {
 	/**
@@ -52,6 +53,12 @@ export class EventsService extends BaseService {
 				logs: true
 			}
 		})
+
+		const sseClient = clients.get(path)
+
+		if (sseClient) {
+			sseClient('message', JSON.stringify(event))
+		}
 
 		publish(event.logs.path, JSON.stringify({ log, level, message, timestamp, meta }))
 
