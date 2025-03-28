@@ -6,20 +6,26 @@
 	import { loginSchema } from '../schema'
 	import * as Form from '$lib/components/ui/form'
 	import { Button } from '$lib/components/ui/button'
+	import { page } from '$app/state'
+	import { Alert } from '$lib/components/ui/alert'
 
 	let { data } = $props()
 
 	const form = superForm(data.form, {
-		validators: zodClient(loginSchema)
+		validators: zodClient(loginSchema),
+		invalidateAll: true
 	})
-	const { form: formData, enhance } = form
+	const { form: formData, submitting, enhance } = form
 
-	$inspect($formData)
+	$inspect($submitting)
 </script>
 
 <div class="flex flex-grow items-center justify-center">
 	<form class="flex min-w-sm flex-col space-y-2" method="POST" use:enhance>
 		<H level={1} class="mb-6 text-center">Login</H>
+		{#if page.url.searchParams.has('signup')}
+			<Alert type="success" class="mb-4">Account created, you can now login</Alert>
+		{/if}
 		<Form.Field {form} name="email">
 			<Form.Control>
 				{#snippet children({ props })}
@@ -48,10 +54,6 @@
 			</Form.Control>
 			<Form.Errors />
 		</Form.Field>
-		<Button>Submit</Button>
-		<!-- <div class="flex flex-col space-y-1">
-			<Label>Password</Label>
-			<Input type="password" name="username" placeholder="Enter yout password" />
-		</div> -->
+		<Button spinner={$submitting}>Submit</Button>
 	</form>
 </div>

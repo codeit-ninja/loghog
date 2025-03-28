@@ -4,6 +4,8 @@ export const load = async ({ locals }) => {
 
 	return {
 		groups,
-		logs
+		logs,
+		breadcrumbs: locals.breadcrumbs,
+		user: locals.user
 	}
 }

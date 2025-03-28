@@ -1,9 +1,9 @@
-import { fail, superValidate } from 'sveltekit-superforms'
+import { fail, setError, superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import { loginSchema } from '../schema'
 import { redirect } from '@sveltejs/kit'
 
-export const load = async ({ params, locals, request }) => {
+export const load = async ({ locals }) => {
 	locals.breadcrumbs.push(
 		{ title: 'account', path: '/auth/login' },
 		{ title: 'login', path: '/auth/login' }
@@ -29,10 +29,11 @@ export const actions = {
 		const result = await event.locals.services.auth().login(form.data.email, form.data.password)
 
 		if (result.isErr()) {
-			return fail(400, {
-				form,
-				error: result.error.type
-			})
+			if (result.error.type === 'PASSWORD_INCORRECT') {
+				return setError(form, 'password', 'Password is incorrect')
+			}
+
+			return setError(form, 'email', 'Email is incorrect')
 		}
 
 		event.cookies.set('auth', JSON.stringify(result.value), { path: '/' })
