@@ -8,6 +8,7 @@ declare global {
 			prisma: import('@prisma/client').PrismaClient
 			socket: import('ws').WebSocket
 			breadcrumbs: { title: string; path: string }[]
+			user: null | Omit<import('@prisma/client').users, 'password'>
 		}
 		// interface PageData {}
 		// interface PageState {}

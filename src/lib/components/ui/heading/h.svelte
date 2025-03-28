@@ -4,7 +4,7 @@
 	import type { HTMLAttributes } from 'svelte/elements'
 
 	type Props = {
-		level: 1 | 2 | 3 | 4 | 5 | 6
+		level: 1 | 2 | 3 | 4 | 5 | 6 | '1' | '2' | '3' | '4' | '5' | '6'
 		children: Snippet
 	} & HTMLAttributes<HTMLHeadingElement>
 

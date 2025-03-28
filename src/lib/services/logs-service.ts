@@ -1,6 +1,6 @@
 import type { Prisma, logs } from '@prisma/client'
-import { BaseService } from './base-service'
 import type { DefaultArgs } from '@prisma/client/runtime/client'
+import { BaseService } from './base-service'
 import { prisma } from '$lib/server/app'
 import { err, errAsync, ok, ResultAsync } from 'neverthrow'
 

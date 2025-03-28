@@ -34,3 +34,24 @@ model events {
     logs    logs @relation(fields: [logId], references: [id])
     logId   String
 }
+
+model users {
+    id          String      @id @default(uuid())
+    email       String      @unique
+    password    String
+    name        String
+    role        String      @default("user")
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+
+    tokens      tokens[]    @relation("userTokens")
+}
+
+model tokens {
+    id          String      @id @default(uuid())
+    userId      String
+    token       String      @unique
+    expiresAt   DateTime    @default(dbgenerated("(now() + interval '30 days')"))
+    createdAt   DateTime    @default(now())
+    users       users       @relation("userTokens", fields: [userId], references: [id])
+}
