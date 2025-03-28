@@ -11,5 +11,7 @@
 </script>
 
 <Field {...restProps}>
-	{@render children()}
+	<div class="has-[[data-fs-error]]:[&_input]:border-error flex flex-col space-y-2">
+		{@render children()}
+	</div>
 </Field>
