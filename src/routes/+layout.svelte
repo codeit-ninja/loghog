@@ -9,6 +9,7 @@
 	let { children, data } = $props()
 
 	app.breadcrumbs = data.breadcrumbs
+	app.user = data.user
 </script>
 
 <div class="flex max-h-screen min-h-screen flex-col">

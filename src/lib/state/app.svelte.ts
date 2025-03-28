@@ -1,4 +1,5 @@
 import { browser } from '$app/environment'
+import type { Prisma, users } from '@prisma/client'
 import type { Snippet } from 'svelte'
 
 export type DialogState<T extends any[] = any> = {
@@ -12,6 +13,7 @@ export type DialogState<T extends any[] = any> = {
 export type AppState = {
 	breadcrumbs: App.Locals['breadcrumbs']
 	darkMode: boolean
+	user: Omit<users, 'password'> | null
 }
 
 /**
@@ -98,6 +100,7 @@ export function createDialog() {
 export function createState() {
 	let breadcrumbs = $state.raw<AppState['breadcrumbs']>([])
 	let darkMode = $state.raw<AppState['darkMode']>(false)
+	let user = $state.raw<AppState['user']>(null)
 
 	$effect.root(() => {
 		if (localStorage.getItem('darkMode') === null) {
@@ -131,6 +134,12 @@ export function createState() {
 			}
 
 			darkMode = value
+		},
+		get user() {
+			return user
+		},
+		set user(value) {
+			user = value
 		}
 	}
 }

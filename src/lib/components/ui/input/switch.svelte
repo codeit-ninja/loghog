@@ -23,7 +23,7 @@
 		{...restProps}
 		class={cn(
 			'rounded-full border-2 border-neutral-200 bg-neutral-50',
-			'relative h-[26px] min-h-[26px] w-[55px] cursor-pointer',
+			'relative h-[22px] min-h-[22px] w-[55px] cursor-pointer',
 			'dark:border-neutral-800 dark:bg-neutral-900',
 			restProps.class
 		)}
@@ -31,7 +31,7 @@
 		<Switch.Thumb
 			class={cn(
 				'flex items-center justify-center transition-transform',
-				'absolute -top-[4px] -left-[4px] h-[30px] w-[30px] rounded-full border-1 border-neutral-200 bg-neutral-50 shadow-sm',
+				'absolute -top-[6px] -left-[4px] h-[30px] w-[30px] rounded-full border-1 border-neutral-200 bg-neutral-50 shadow-sm',
 				'dark:border-neutral-700 dark:bg-neutral-800',
 				checked ? 'translate-x-[28px]' : 'translate-x-0'
 			)}
