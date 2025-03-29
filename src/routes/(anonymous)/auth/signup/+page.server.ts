@@ -1,6 +1,6 @@
 import { fail, message, setError, superValidate } from 'sveltekit-superforms'
-import { zod } from 'sveltekit-superforms/adapters'
-import { signupSchema } from '../schema'
+import { arktype } from 'sveltekit-superforms/adapters'
+import { signupSchema, signupSchemaDefaults } from '../schema'
 import { error, redirect } from '@sveltejs/kit'
 import { prisma } from '$lib/server/app'
 
@@ -11,20 +11,13 @@ export const load = async ({ locals }) => {
 	)
 
 	return {
-		form: await superValidate(zod(signupSchema), {
-			defaults: {
-				email: 'richard@codeit.ninja',
-				name: 'Richard Mauritz',
-				password: 'verystrongpassword',
-				confirmPassword: 'verystrongpassword'
-			}
-		})
+		form: await superValidate(arktype(signupSchema, { defaults: signupSchemaDefaults }))
 	}
 }
 
 export const actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(signupSchema))
+		const form = await superValidate(event, arktype(signupSchema, { defaults: signupSchemaDefaults }))
 
 		if (!form.valid) {
 			return fail(400, {

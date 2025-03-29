@@ -2,7 +2,7 @@
 	import { superForm } from 'sveltekit-superforms'
 	import { H } from '$lib/components/ui/heading'
 	import { Input } from '$lib/components/ui/input'
-	import { zodClient } from 'sveltekit-superforms/adapters'
+	import { arktypeClient } from 'sveltekit-superforms/adapters'
 	import { loginSchema } from '../schema'
 	import * as Form from '$lib/components/ui/form'
 	import { Button } from '$lib/components/ui/button'
@@ -12,7 +12,7 @@
 	let { data } = $props()
 
 	const form = superForm(data.form, {
-		validators: zodClient(loginSchema),
+		validators: arktypeClient(loginSchema),
 		invalidateAll: true
 	})
 	const { form: formData, submitting, enhance } = form

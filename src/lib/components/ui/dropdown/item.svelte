@@ -10,7 +10,9 @@
 <DropdownMenu.Item
 	{...restProps}
 	class={cn(
-		'cursor-pointer rounded-md px-3 py-1 transition-colors outline-none hover:bg-neutral-700',
+		'cursor-pointer rounded-md px-3 py-1 transition-colors outline-none',
+        'hover:bg-neutral-100',
+        'dark:hover:bg-neutral-700',
 		restProps.class
 	)}
 />

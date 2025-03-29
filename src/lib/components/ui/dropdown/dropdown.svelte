@@ -28,7 +28,9 @@
 		<DropdownMenu.Content
 			{...contentProps}
 			class={cn(
-				'min-w-[150px] rounded-lg border border-neutral-800 bg-neutral-900 p-1 outline-none'
+				'min-w-[150px] rounded-lg border p-1 outline-none',
+                'bg-white border-neutral-200',
+                'dark:border-neutral-800 dark:bg-neutral-900'
 			)}
 		>
 			{#if ref}
