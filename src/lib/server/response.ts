@@ -10,11 +10,12 @@ import { json as jsonResponse } from '@sveltejs/kit'
  * @param {unknown} data The data to include in the response.
  * @returns {Response}
  */
-export const json = <T extends unknown>(data: T) => {
+export const json = <T extends unknown, Meta extends Record<string, any>>(data: T, meta?: Meta) => {
 	return jsonResponse({
 		status: 200,
 		code: 'OK',
-		data
+		data,
+		meta
 	})
 }
 /**
