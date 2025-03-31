@@ -11,90 +11,101 @@
 	import { debounce } from 'lodash-es'
 	import { beforeNavigate } from '$app/navigation'
 	import { untrack } from 'svelte'
+	import { Log } from '$lib/client/log.svelte.js'
+	import { Pagination } from '$lib/components/ui/pagination'
 
 	let { data } = $props()
-	let events: Prisma.eventsGetPayload<{ include: { logs: true } }>[] = $state([])
-	let logLevels: string[] = $state(['all'])
-	let logRange: string = $state('0')
-	let searchQuery = $state<string>()
-	let isLoading = $state(false)
-	let searchParams = $state(new URLSearchParams())
 
-	const event = source(`/sse/logs/${page.params.path}`).select('message').json()
+	const log = new Log(page.params.path)
 
 	$effect(() => {
-		if (!$event) {
-			return
-		}
-
-		untrack(() => {
-			const isInRange = (timestamp: string) =>
-				isAfter(
-					new Date(timestamp),
-					subMilliseconds(new Date(), parseInt(logRange) > 0 ? parseInt(logRange) : 1000000)
-				)
-
-			if (
-				logLevels.includes('all') &&
-				isInRange($event.timestamp) &&
-				(searchQuery === undefined ||
-					$event.message.toLowerCase().includes(searchQuery.toLowerCase()))
-			) {
-				events.unshift($event)
-			} else if (
-				logLevels.includes($event.level) &&
-				isInRange($event.timestamp) &&
-				searchQuery !== undefined
-			) {
-				if (searchQuery) {
-					const query = searchQuery.toLowerCase()
-					if ($event.message.toLowerCase().includes(query)) {
-						events.unshift($event)
-					}
-				} else {
-					events.unshift($event)
-				}
-			}
-		})
+		console.log(log)
 	})
+	// const event = source(`/sse/logs/${page.params.path}`).select('message').json()
 
-	const update = debounce(() => {
-		isLoading = true
+	// $effect(() => {
+	// 	if (!$event) {
+	// 		return
+	// 	}
 
-		searchParams.set('level', logLevels.join(','))
-		searchParams.set('range', logRange)
+	// 	untrack(() => {
+	// 		const isInRange = (timestamp: string) =>
+	// 			isAfter(
+	// 				new Date(timestamp),
+	// 				subMilliseconds(new Date(), parseInt(logRange) > 0 ? parseInt(logRange) : 1000000)
+	// 			)
 
-		if (searchQuery && searchQuery !== '') {
-			searchParams.set('query', searchQuery)
-		} else {
-			searchParams.delete('query')
-		}
+	// 		if (
+	// 			logLevels.includes('all') &&
+	// 			isInRange($event.timestamp) &&
+	// 			(searchQuery === undefined ||
+	// 				$event.message.toLowerCase().includes(searchQuery.toLowerCase()))
+	// 		) {
+	// 			events.unshift($event)
+	// 		} else if (
+	// 			logLevels.includes($event.level) &&
+	// 			isInRange($event.timestamp) &&
+	// 			searchQuery !== undefined
+	// 		) {
+	// 			if (searchQuery) {
+	// 				const query = searchQuery.toLowerCase()
+	// 				if ($event.message.toLowerCase().includes(query)) {
+	// 					events.unshift($event)
+	// 				}
+	// 			} else {
+	// 				events.unshift($event)
+	// 			}
+	// 		}
+	// 	})
+	// })
 
-		fetch(`/api/logs/${page.params.path}?${searchParams.toString()}`)
-			.then((response) => response.json())
-			.then((response) => {
-				if (response.code === 'OK') {
-					events = response.data.events
-				}
-			})
-			.finally(() => {
-				setTimeout(() => {
-					isLoading = false
-				}, 500)
-			})
-	}, 250)
+	// const update = debounce(() => {
+	// 	isLoading = true
 
-	beforeNavigate(() => {
-		update()
-	})
+	// 	searchParams.set('level', logLevels.join(','))
+	// 	searchParams.set('range', logRange)
+	// 	searchParams.set('take', '100')
 
-	$effect(() => {
-		searchQuery
-		logLevels
-		logRange
+	// 	if (searchQuery && searchQuery !== '') {
+	// 		searchParams.set('query', searchQuery)
+	// 	} else {
+	// 		searchParams.delete('query')
+	// 	}
 
-		update()
-	})
+	// 	if (meta?.cursor) {
+	// 		searchParams.set('cursor', meta.cursor.toString())
+	// 	} else {
+	// 		searchParams.delete('cursor')
+	// 	}
+
+	// 	fetch(`/api/logs/${page.params.path}?${searchParams.toString()}`)
+	// 		.then((response) => response.json())
+	// 		.then((response) => {
+	// 			if (response.code === 'OK') {
+	// 				events = response.data.events
+	// 				meta = response.meta
+	// 			}
+	// 		})
+	// 		.finally(() => {
+	// 			setTimeout(() => {
+	// 				isLoading = false
+	// 			}, 500)
+	// 		})
+	// }, 250)
+
+	// beforeNavigate(() => {
+	// 	update()
+	// })
+
+	// $effect(() => {
+	// 	searchQuery
+	// 	logLevels
+	// 	logRange
+
+	// 	update()
+	// })
+
+	$inspect(log.meta)
 </script>
 
 <div class="flex flex-grow flex-col gap-4">
@@ -105,17 +116,30 @@
 				<FunnelIcon size={22} />
 				Filter:
 			</span>
-			<SelectLevel bind:logLevels />
-			<SelectRange bind:logRange />
-			<Input placeholder="Search" bind:value={searchQuery} />
+			<SelectLevel bind:logLevels={log.levels} />
+			<SelectRange bind:logRange={log.range} />
+			<Input placeholder="Search" bind:value={log.query} />
 		</div>
 	</header>
 
 	<div class="flex h-[0px] flex-grow flex-col">
-		<LogTable {isLoading}>
-			{#each events as event, index (event.id)}
+		<LogTable isLoading={log.isLoading}>
+			{#each log.events as event, index (event.id)}
 				<LogLine {event} />
 			{/each}
 		</LogTable>
 	</div>
+
+	{#if log.meta}
+		<div class="border-t border-neutral-200 p-6 dark:border-neutral-900">
+			<Pagination
+				page={log.currentPage}
+				count={log.meta.count}
+				perPage={log.meta.take}
+				onPageChange={(page) => {
+					log.goToPage(page)
+				}}
+			/>
+		</div>
+	{/if}
 </div>

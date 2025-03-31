@@ -5,21 +5,25 @@ import { subMilliseconds } from 'date-fns'
 
 type QueryParams = {
 	orderBy?: string
-	level?: string
+	levels?: string
 	range?: string
 	query?: string
+	take?: string
+	skip?: string
 }
 
 export const GET = async ({ params, locals, url }) => {
 	const searchParams = url.searchParams.toString()
 	const {
 		orderBy: orderByRaw,
-		level,
+		levels: levelsRaw,
 		range: rangeRaw,
-		query
+		query,
+		take,
+		skip
 	} = QueryString.parse(searchParams) as QueryParams
 
-	const levels = level?.split(',')
+	const levels = levelsRaw?.split(',')
 	const range = rangeRaw ? parseInt(rangeRaw, 10) : 0
 
 	// Parse orderBy field
@@ -31,11 +35,15 @@ export const GET = async ({ params, locals, url }) => {
 		orderBy = { [direction ? direction : field]: direction ? 'desc' : 'asc' }
 	}
 
+	// Parse skip and take
+	const takeNumber = take ? parseInt(take, 10) : 25
+	const skipNumber = skip ? parseInt(skip, 10) : 0
+
 	// Construct where conditions
 	let where: Prisma.eventsWhereInput = {}
 
 	if (levels?.includes('all')) {
-		where.level = undefined
+		delete where.level
 	} else if (levels?.length) {
 		where.OR = levels.map((level) => ({ level }))
 	}
@@ -53,7 +61,17 @@ export const GET = async ({ params, locals, url }) => {
 	}
 
 	const log = await locals.services.logs().get(params.path, {
-		include: { events: { orderBy, where, take: 100 } }
+		include: {
+			_count: {
+				select: { events: { where } }
+			},
+			events: {
+				orderBy,
+				where,
+				take: takeNumber,
+				skip: skipNumber
+			}
+		}
 	})
 
 	if (log.isErr()) {
@@ -61,5 +79,12 @@ export const GET = async ({ params, locals, url }) => {
 		return error(404, 'NOT_FOUND')
 	}
 
-	return json(log.value)
+	return json(log.value, {
+		// @ts-ignore
+		count: log.value._count.events,
+		// @ts-ignore
+		cursor: log.value.events.length ? log.value.events[log.value.events.length - 1].id : null,
+		skip: skipNumber,
+		take: takeNumber
+	})
 }

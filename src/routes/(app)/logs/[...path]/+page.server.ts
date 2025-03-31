@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 
-export const load = async ({ params, locals, request }) => {
+export const load = async ({ params, locals }) => {
 	const result = await locals.services.logs().get(params.path)
 
 	if (result.isErr()) {
