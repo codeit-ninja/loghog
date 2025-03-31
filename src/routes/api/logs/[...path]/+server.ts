@@ -62,7 +62,9 @@ export const GET = async ({ params, locals, url }) => {
 
 	const log = await locals.services.logs().get(params.path, {
 		include: {
-			_count: true,
+			_count: {
+				select: { events: { where } }
+			},
 			events: {
 				orderBy,
 				where,
