@@ -73,6 +73,11 @@ export class Log {
 			this.searchParams.set('levels', levels.join(','))
 			this.searchParams.set('range', range)
 			this.searchParams.set('query', query)
+			this.searchParams.set('skip', '0')
+
+			this.skip = parseInt(this.searchParams.get('skip') || '0', 10)
+			this.take = parseInt(this.searchParams.get('take') || '25', 10)
+			this.currentPage = 1
 
 			goto(`?${this.searchParams.toString()}`, { replaceState: true, keepFocus: true })
 			setTimeout(() => this.fetch())
