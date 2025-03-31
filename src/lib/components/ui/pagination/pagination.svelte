@@ -25,7 +25,7 @@
 
 		{#each pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
-				<div>...</div>
+				<div class="flex size-10 items-center justify-center">...</div>
 			{:else}
 				<Pagination.Page
 					{page}
